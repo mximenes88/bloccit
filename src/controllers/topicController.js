@@ -4,6 +4,7 @@ module.exports = {
     index(req,res,next){
         topicQueries.getAllTopics((err,topics)=>{
             if(err){
+                console.log("ERROR:", err);
                 res.redirect(500,"static/index");
 
             }else{
