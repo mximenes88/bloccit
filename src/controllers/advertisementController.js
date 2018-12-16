@@ -5,7 +5,6 @@ module.exports ={
     index(req,res,next){
        advertisementQueries.getAllAdvertisements((err,advertisement) =>{
         if(err){
-
              console.log(err);
             res.redirect(500, "static/index");
           } else {
@@ -45,9 +44,10 @@ module.exports ={
     destroy(req, res,next){
       advertisementQueries.deleteAdvertisement(req.params.id, (err,advertisement) =>{
         if(err){
+          console.log(err);
           res.redirect(500, `/advertisement/${advertisement.id}`)
         }else{
-          res.redirect(300, "/advertisement")
+          res.redirect(303, "/advertisement")
         }
       });
     },
@@ -67,7 +67,7 @@ module.exports ={
         if(err || advertisement == null){
           res.redirect(404, `/advertisement/${req.params.id}/edit`);
         } else {
-          res.redirect(`/advertisement/${topic.id}`);
+          res.redirect(`/advertisement/${advertisement.id}`);
         }
         });
         
