@@ -14,6 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "topicId",
       as: "rules",
     })
-  };
+  }
   return Topic;
 };
