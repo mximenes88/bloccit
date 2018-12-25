@@ -69,22 +69,24 @@ describe("Post", () => {
       })
     });
   });
-  describe("#setTopic()", () => {
+  
+	describe('#setTopic()', () => {
+		it('should associate a topic and a post together', done => {
+			Topic.create({
+				title: 'Challenges of interstellar travel',
+				description: '1. The Wi-Fi is terrible',
+			}).then(newTopic => {
+				expect(this.post.topicId).toBe(this.topic.id);
 
-    it("should associate a topic and a post together", (done) => {
-      Topic.create({
-        title: "Challenges of interstellar travel",
-        description: "1. The Wi-Fi is terrible"
-      })
-      .then((newTopic) => {
-        expect(this.post.topicId).toBe(this.topic.id);
-        this.post.setTopic(newTopic)
-          expect(post.topicId).toBe(newTopic.id);
-          done();
-
-        });
-      });
-    });
+				this.post.setTopic(newTopic).then(post => {
+					expect(this.post.topicId).toBe(newTopic.id);
+					done();
+				});
+			});
+		});
+	});
+  
+    
  describe("#getTopic()", () => {
       it("should return the associated topic", (done) => {
         this.post.getTopic()

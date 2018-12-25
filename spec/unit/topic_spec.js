@@ -1,8 +1,6 @@
 const sequelize = require('../../src/db/models/index').sequelize;
 const Topic = require('../../src/db/models').Topic;
 const Post = require('../../src/db/models').Post;
-//#1 We require the User model to use it in our tests
-const User = require('../../src/db/models').User;
 
 describe('Post', () => {
 	beforeEach(done => {
@@ -35,7 +33,6 @@ describe('Post', () => {
 				});
 			});
 		});
-	});
 
 	describe('#create()', () => {
 		it('should create a topic object with a title and description', done => {
