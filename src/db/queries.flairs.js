@@ -5,7 +5,7 @@ const Flair = require('./models').Flair;
 module.exports = {
 	addFlair(newFlair, callback) {
 		return Flair.create(newFlair)
-			.then(flair => {
+			.then((flair) => {
 				callback(null, flair);
 			})
 			.catch(err => {
@@ -13,18 +13,7 @@ module.exports = {
 			});
 	},
 	getFlair(id, callback) {
-		return Flair.findById(id, {
-			include: [
-				{
-					model: Post,
-					as: 'posts',
-				},
-				{
-					model: Topic,
-					as: 'topics',
-				},
-			],
-		})
+		return Flair.findById(id)
 			.then(flair => {
 				callback(null, flair);
 			})
@@ -39,7 +28,7 @@ module.exports = {
 			.then(deletedRecordsCount => {
 				callback(null, deletedRecordsCount);
 			})
-			.catch(err => {
+			.catch((err) => {
 				callback(err);
 			});
 	},
@@ -56,7 +45,7 @@ module.exports = {
 				.then(() => {
 					callback(null, flair);
 				})
-				.catch(err => {
+				.catch((err) => {
 					callback(err);
 				});
 		});

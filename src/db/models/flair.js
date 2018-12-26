@@ -25,11 +25,11 @@ module.exports = (sequelize, DataTypes) => {
 	Flair.associate = function(models) {
 		Flair.belongsTo(models.Post, {
 			foreignKey: 'postId',
-			onDelete: 'Cascade',
+			onDelete: 'Cascade'
 		});
 		Flair.belongsTo(models.Topic, {
 			foreignKey: 'topicId',
-			onDelete: 'CASCADE',
+			onDelete: 'CASCADE'
 		});
 	};
 	return Flair;

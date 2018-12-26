@@ -13,6 +13,7 @@ module.exports = {
 		};
 		flairQueries.addFlair(newFlair, (err, flair) => {
 			if (err) {
+				console.log(err)
 				res.redirect(500, 'flairs/new');
 			} else {
 				res.redirect(303, `/topics/${newFlair.topicId}/posts/${newFlair.postId}/flairs/${flair.id}`);
@@ -21,10 +22,10 @@ module.exports = {
 	},
 	show(req, res, next) {
 		flairQueries.getFlair(req.params.id, (err, flair) => {
-			if (err || flair == null) {
-				res.redirect(404, '/');
+			if (err || flair == null)  {
+				res.redirect(404,'/')
 			} else {
-				res.render('flairs/show', { flair });
+				res.render('flairs/show', {flair});
 			}
 		});
 	},
@@ -40,9 +41,9 @@ module.exports = {
 	edit(req, res, next) {
 		flairQueries.getFlair(req.params.id, (err, flair) => {
 			if (err || flair == null) {
-				res.redirect(404, "/");
+				res.redirect(404, '/');
 			} else {
-				res.render('flairs/edit', { flair });
+				res.render('flairs/edit', {flair});
 			}
 		});
 	},

@@ -15,7 +15,7 @@ describe('routes : flairs', () => {
 		sequelize.sync({ force: true }).then(res => {
 			Topic.create({
 				title: 'The Ocean',
-				description: 'What can we enjoy it?',
+				description: 'How can we enjoy it?',
 			}).then(topic => {
 				this.topic = topic;
 
@@ -111,7 +111,7 @@ describe('routes : flairs', () => {
 
 	describe('GET /posts/:postId/flairs/:id/edit', () => {
 		it('should render a veiw with an edit post form', done => {
-			request.get(`${base}/${this.topic.id}/posts/${this.postId}/flairs/${this.flair.id}/edit`, (err, res, body) => {
+			request.get(`${base}/${this.topic.id}/posts/${this.post.id}/flairs/${this.flair.id}/edit`, (err, res, body) => {
 				expect(err).toBeNull();
 				expect(body).toContain("Edit Flair");
 				expect(body).toContain("Magenta flair");

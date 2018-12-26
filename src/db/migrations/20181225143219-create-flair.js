@@ -11,9 +11,11 @@ module.exports = {
 			},
 			name: {
 				type: Sequelize.STRING,
+				allowNull: false
 			},
 			color: {
 				type: Sequelize.STRING,
+				allowNull: false
 			},
 			topicId: {
 				type: Sequelize.INTEGER,
