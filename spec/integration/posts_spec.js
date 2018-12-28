@@ -74,8 +74,7 @@ describe("routes : posts", () => {
          }
        );
      });
- 
-    });
+   });
 
     describe("GET /topics/:topicId/posts/:id", () => {
       it("should render a view with the selected post", (done) => {
@@ -154,4 +153,56 @@ describe("routes : posts", () => {
       });
  
     });
+
+    describe("POST /topics/:topicId/posts/create", () => {
+
+      it("should create a new post and redirect", (done) => {
+         const options = {
+           url: `${base}/${this.topic.id}/posts/create`,
+           form: {
+             title: "Watching snow melt",
+             body: "Without a doubt my favoriting things to do besides watching paint dry!"
+           }
+         };
+         request.post(options,
+           (err, res, body) => {
+             Post.findOne({where: {title: "Watching snow melt"}})
+             .then((post) => {
+               expect(post).not.toBeNull();
+               expect(post.title).toBe("Watching snow melt");
+               expect(post.body).toBe("Without a doubt my favoriting things to do besides watching paint dry!");
+               expect(post.topicId).not.toBeNull();
+               done();
+             })
+             .catch((err) => {
+               console.log(err);
+               done();
+             });
+           }
+         );
+       });
+       it("should not create a new post that fails validations", (done) => {
+        const options = {
+          url: `${base}/${this.topic.id}/posts/create`,
+          form: {
+            title: "a",
+            body: "b"
+          }
+        };
+        request.post(options,
+          (err, res, body) => {
+            Post.findOne({where: {title: "a"}})
+            .then((post) => {
+                expect(post).toBeNull();
+                done();
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            });
+          }
+        );
+      });
+   
+      });
 });
