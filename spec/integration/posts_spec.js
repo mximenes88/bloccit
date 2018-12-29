@@ -146,7 +146,7 @@ describe("routes : posts", () => {
               where: {id: this.post.id}
             })
             .then((post) => {
-              expect(post.title).toBe("Snowman Building Competition");
+              expect(post.title).toBe("Snowball Fighting");
               done();
             });
           });
