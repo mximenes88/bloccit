@@ -1,38 +1,46 @@
 const sequelize = require('../../src/db/models/index').sequelize;
 const Topic = require('../../src/db/models').Topic;
 const Post = require('../../src/db/models').Post;
-
+const User = require("../../src/db/models").User;
 describe('Post', () => {
 	beforeEach(done => {
 		this.topic;
 		this.post;
+		this.user;
 
-		sequelize.sync({ force: true }).then(res => {
-				Topic.create(
-					{
-						title: 'Food Eating Contests',
-						description: 'A list of recent food eating contests',
+		sequelize.sync({force: true}).then((res) => {
 
-						posts: [
-							{
-								title: 'Hot Dog Fair',
-								body: 'The winner ste 300 hot dogs',
-							},
-						],
-					},
-					{
-						include: {
-							model: Post,
-							as: 'posts',
-						},
-					},
-				).then(topic => {
-					this.topic = topic; 
-					this.post = topic.posts[0]; 
-					done();
-				});
-			});
-		});
+			User.create({
+				 email: "starman@tesla.com",
+				 password: "Trekkie4lyfe"
+				   })
+				 .then((user) => {
+				 this.user = user; //store the user
+			
+			Topic.create({
+				title: "Expeditions to Alpha Centauri",
+				 description: "A compilation of reports from recent visits to the star system.",
+			
+				posts: [{
+					 title: "My first visit to Proxima Centauri b",
+					 body: "I saw some rocks.",
+					 userId: this.user.id
+					   }]
+					 }, {
+			
+				include: {
+					 model: Post,
+					 as: "posts"
+					   }
+					 })
+					 .then((topic) => {
+					   this.topic = topic; //store the topic
+					   this.post = topic.posts[0]; //store the post
+					   done();
+					 })
+				   })
+				 });
+			   });
 
 	describe('#create()', () => {
 		it('should create a topic object with a title and description', done => {
@@ -68,8 +76,8 @@ describe('Post', () => {
 	describe('#getPosts()', () => {
 		it('should return the posts with the associated topic', done => {
 			this.topic.getPosts().then(associatedPosts => {
-				expect(associatedPosts[0].title).toBe( 'Hot Dog Fair');
-				expect(associatedPosts[0].body).toBe('The winner ste 300 hot dogs');
+				expect(associatedPosts[0].title).toBe( 'My first visit to Proxima Centauri b');
+				expect(associatedPosts[0].body).toBe('I saw some rocks.');
 				expect(associatedPosts[0].topicId).toBe(this.topic.id);
 				done();
 			});
