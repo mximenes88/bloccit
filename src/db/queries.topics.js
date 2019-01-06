@@ -1,6 +1,7 @@
 const Topic = require('./models').Topic;
 const Post = require('./models').Post;
 const Flair = require('./models').Flair;
+const Authorizer = require("../policies/topic");
 
 module.exports = {
 	getAllTopics(callback) {
