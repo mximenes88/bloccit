@@ -24,9 +24,9 @@ module.exports = {
 					as: 'flairs',
 				},
 				{
-				   model: Comment, as: "comments", include: [
+				   model:Comment, as: "comments", include: [
 						{model: User }
-					  ]}
+			  ]}
 				
 			],
 		})

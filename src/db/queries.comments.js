@@ -5,8 +5,6 @@ const User = require("./models").User;
 const Authorizer = require("../policies/comment");
 
 module.exports = {
-
- // #2
   createComment(newComment, callback){
     return Comment.create(newComment)
     .then((comment) => {
@@ -17,7 +15,6 @@ module.exports = {
     });
   },
 
- // #3
   deleteComment(req, callback){
     return Comment.findById(req.params.id)
     .then((comment) => {

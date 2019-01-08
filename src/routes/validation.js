@@ -58,7 +58,7 @@ module.exports = {
           req.flash("error", errors);
           return res.redirect(req.headers.referer);
         } else {
-          return next()
+          return next();
         }
       }
 
