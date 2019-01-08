@@ -4,6 +4,7 @@ const Flair = require('./models').Flair;
 const postQueries = require('../db/queries.posts.js');
 const Authorizer = require("../policies/post");
 const User = require("./models").User;
+const Comment = require("./models").Comment;
 
 module.exports = {
 	addPost(newPost, callback) {
@@ -22,6 +23,11 @@ module.exports = {
 					model: Flair,
 					as: 'flairs',
 				},
+				{
+				   model: Comment, as: "comments", include: [
+						{model: User }
+					  ]}
+				
 			],
 		})
 			.then(post => {
