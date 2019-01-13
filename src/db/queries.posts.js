@@ -5,6 +5,7 @@ const postQueries = require('../db/queries.posts.js');
 const Authorizer = require("../policies/post");
 const User = require("./models").User;
 const Comment = require("./models").Comment;
+const Vote = require("./models").Vote;
 
 module.exports = {
 	addPost(newPost, callback) {
@@ -26,7 +27,7 @@ module.exports = {
 				{
 				   model:Comment, as: "comments", include: [
 						{model: User }
-			  ]}
+			  ]},{model: Vote, as: "votes"}
 				
 			],
 		})
