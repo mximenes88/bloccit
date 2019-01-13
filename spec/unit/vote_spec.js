@@ -99,6 +99,21 @@ describe("Vote", () =>{
             });
         });
 
+        it("should not create an upvote or a downvote if value is not -1 or 1",(done)=>{
+            Vote.create({
+                value:-3,
+                postId: this.post.id,
+                userId:this.user.id
+            })
+            .then((vote) =>{
+                done();
+            })
+            .catch((err) =>{
+                expect(err.message).toContain("Validation error: isIn range failed")
+                done();
+            })
+        });
+
         it("should not create a vote without assigned post or user", (done) =>{
             Vote.create({
                 value:1
@@ -114,6 +129,34 @@ describe("Vote", () =>{
 
         });
     });
+
+        it("should not create more than one vote per user per post", (done) => {
+            Vote.create({
+            value: 1,
+            postId: this.post.id,
+            userId: this.user.id
+            })
+            .then((vote) => {
+            Vote.create({
+                value:1,
+                postId: this.post.id,
+                userId: this.user.id
+            })
+            .then((vote) => {
+                done();
+            })
+            .catch((err) => {
+                expect(err.message).toContain("Validation error:Only one vote is allowed per post");
+                done();
+            });
+            done();
+            })
+            .catch((err) => {
+            console.log(err);
+            done();
+            })
+        })
+    
 
 
     describe("#setUser()" ,()=>{
@@ -134,7 +177,7 @@ describe("Vote", () =>{
                 .then((newUser) =>{
                     this.vote.setUser(newUser)
                     .then((vote) =>{
-                        expect(vote.userId).toBe(newUser.id); //confirm it was updated
+                        expect(vote.userId).toBe(newUser.id); 
                         done();
                     });
                 })
@@ -205,9 +248,7 @@ describe("Vote", () =>{
             });
           });
         });
-   
-      });
-   
+
      describe("#getPost()", () => {
    
         it("should return the associated post", (done) => {
@@ -231,6 +272,104 @@ describe("Vote", () =>{
    
       });
 
+      describe("#getPoints()", ()=>{
+          it("should return all the points associated with a post", (done) =>{
+               Vote.create({           
+                  value: -1,
+                  postId: this.post.id,
+                  userId: this.user.id
+                })
+                .then((vote) => {
+                  this.vote = vote;     
+         
+                  Post.create({         
+                    title: "Dress code on Proxima b",
+                    body: "Spacesuit, space helmet, space boots, and space gloves",
+                    topicId: this.topic.id,
+                    userId: this.user.id
+                  })
+                  .then((newPost) => {
+         
+                    expect(this.vote.postId).toBe(this.post.id); 
+         
+                    this.vote.setPost(newPost)              
+                    .then((vote) => {
+         
+                      expect(vote.postId).toBe(newPost.id); 
+                      expect(newPost.getPoints()).toBe(1);
+                      done();
+         
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    done();
+                  });
+                });
+             });
+       }) 
+       
+       
+       describe("#hasUpvoted()", ()=>{
+        it("should return true if an user has upvoted a post", (done) => {
+            Vote.create({           
+              value: 1,
+              postId: this.post.id,
+              userId: this.user.id
+            })
+            .then((vote) => {
+              this.vote = vote;     
 
+              Post.create({         
+                title: "Dress code on Proxima b",
+                body: "Spacesuit, space helmet, space boots, and space gloves",
+                topicId: this.topic.id,
+                userId: this.user.id
+              })
+               .then(newPost => {
+                expect(this.vote.postId).not.toBe(newPost.id);
+                this.vote.setPost(newPost).then(vote => {
+                    expect(vote.postId).toBe(newPost.id);
+                    expect(this.vote.userId).toBe(newPost.userId);
+                    newPost.hasUpvoteFor(newPost.userId).then(votes => {
+                        expect(votes.length > 0).toBe(true);
+                        done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 
+  describe('#hasDownvoteFor()', () => {
+		it('should return true if the user with the matching userId has an downvote for a post', done => {
+			Vote.create({
+				value: -1,
+				postId: this.post.id,
+				userId: this.user.id,
+			}).then(vote => {
+				this.vote = vote;
+
+				Post.create({
+					title: "Dress code on Proxima b",
+					body: "Spacesuit, space helmet, space boots, and space gloves",
+					topicId: this.topic.id,
+					userId: this.user.id,
+				}).then(newPost => {
+					expect(this.vote.postId).not.toBe(newPost.id);
+					this.vote.setPost(newPost).then(vote => {
+						expect(vote.postId).toBe(newPost.id);
+						expect(this.vote.userId).toBe(newPost.userId);t
+						newPost.hasDownvoteFor(newPost.userId).then(votes => {
+							expect(votes.length > 0).toBe(true);
+							done();
+						});
+					});
+				});
+			});
+		});
+	}); 
+
+    
 });
+

@@ -26,5 +26,5 @@ module.exports = {
             req.flash("notice", "You must be signed in to do that.")
             res.redirect(req.headers.referer);
         }
-    }
+    },
 }
