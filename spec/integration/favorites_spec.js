@@ -100,3 +100,79 @@ describe("routes : favorites", () => {
 
     });
   });
+  describe("signed in user favoriting a post", () => {
+
+    beforeEach((done) => {  // before each suite in this context
+      request.get({         // mock authentication
+        url: "http://localhost:3000/auth/fake",
+        form: {
+          role: "member",     // mock authenticate as member user
+          userId: this.user.id
+        }
+      },
+        (err, res, body) => {
+          done();
+        }
+      );
+    });
+
+    describe("POST /topics/:topicId/posts/:postId/favorites/create", () => {
+
+      it("should create a favorite", (done) => {
+        const options = {
+          url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
+        };
+        request.post(options,
+          (err, res, body) => {
+            Favorite.findOne({
+              where: {
+                userId: this.user.id,
+                postId: this.post.id
+              }
+            })
+            .then((favorite) => {               // confirm that a favorite was created
+              expect(favorite).not.toBeNull();
+              expect(favorite.userId).toBe(this.user.id);
+              expect(favorite.postId).toBe(this.post.id);
+              done();
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            });
+          }
+        );
+      });
+    });
+
+    describe("POST /topics/:topicId/posts/:postId/favorites/:id/destroy", () => {
+
+      it("should destroy a favorite", (done) => {
+        const options = {
+          url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
+        };
+
+        let favCountBeforeDelete;
+
+        request.post(options, (err, res, body) => {
+          this.post.getFavorites()
+          .then((favorites) => {
+            const favorite = favorites[0];
+            favCountBeforeDelete = favorites.length;
+
+            request.post(`${base}${this.topic.id}/posts/${this.post.id}/favorites/${favorite.id}/destroy`,
+              (err, res, body) => {
+                this.post.getFavorites()
+                .then((favorites) => {
+                  expect(favorites.length).toBe(favCountBeforeDelete - 1);
+                  done();
+                });
+              }
+            );
+          });
+        });
+      });
+    });
+
+   });
+});
