@@ -38,10 +38,11 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: "userId",
     as: "votes"
   });
-}
 
-  User.prototype.isAdmin = function(){
+ User.prototype.isAdmin = function(){
     return this.role === "admin";
   };
+
+};
   return User;
 };
