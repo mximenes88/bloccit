@@ -48,7 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "postId",
       as: "votes"
     });
-  };
 
   Post.afterCreate((post, callback) => {
     return models.Favorite.create({
@@ -84,5 +83,7 @@ module.exports = (sequelize, DataTypes) => {
        order:[["createdAt", "DESC"]]
      }
    })
+
+  };
   return Post;
 };
