@@ -2,7 +2,7 @@
   "name": "bloccit",
   "version": "1.0.0",
   "engines": {
-    "node": "10.3.0"
+    "node": "10.15.1"
   },
   "description": "A Reddit-like application for users to discuss and share content",
   "main": "(src/server.js)",
