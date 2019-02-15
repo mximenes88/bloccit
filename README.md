@@ -25,4 +25,4 @@ A Reddit-like application for users to discuss and share content in Node
 
 
 
-Check out the live version @ https://dashboard.heroku.com/apps/mximenes88-bloccit1-node
+Check out the live version @ https://mximenes88-bloccit1-node.herokuapp.com/
